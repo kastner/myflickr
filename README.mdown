@@ -1,0 +1,23 @@
+MyFlickr -- a simple flickr library for python
+==============================================
+
+This is a very simple library for using flickr within Python.
+
+* Simple
+* Extensible
+* Totally non-idiomatic python
+
+Patches aren't only accepted, I'm begging you for them.
+
+Usage
+-----
+
+		from myflickr import MyFlickr
+		
+		f = MyFlickr(api_key)
+		photos = f.interesting()
+		for photo in photos:
+			print "http://farm%s.static.flickr.com/%s/%s_%s_s.jpg", (
+					photo.farm, photo.server, photo.id, photo.secret)
+
+    
