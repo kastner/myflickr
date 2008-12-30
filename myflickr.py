@@ -1,12 +1,14 @@
 from django.utils import simplejson as json
 from google.appengine.api import urlfetch
+import md5
 
 
 class MyFlickr(object):
     """A simple class for dealing with flickr via the API"""
-    def __init__(self, api_key):
+    def __init__(self, api_key, secret=""):
         super(MyFlickr, self).__init__()
         self.api_key = api_key
+        self.secret = secret
         self.api_host = "http://api.flickr.com/services/rest/"
     
     def default_args(self, method):
@@ -43,3 +45,17 @@ class MyFlickr(object):
         photos = self.call("flickr.interestingness.getList", **kwargs)
         return self.get_photos(photos)
     
+    def signature(self, the_dict):
+        string = ""
+        for key in sorted(the_dict):
+            string += key + str(the_dict[key])
+        return md5.new(string).hexdigest()
+    
+    def login_link(self, perms="read"):
+        dict = {
+            "api_key": self.api_key,
+            "perms": perms
+        }
+        signature = self.signature(dict)
+        dict.update({"api_sig": signature})
+        return "http://flickr.com/services/auth/?" + self.dict_to_query_string(dict)

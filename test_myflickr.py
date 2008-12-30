@@ -33,6 +33,12 @@ class TestMyFlickr(unittest.TestCase):
         assert re.search("page=1", url)
         assert re.search("per_page=50", url)
         
+    def test_signature(self):
+        dict = {"b": 567, "a": 123}
+        assert "ee63db973f62e0df82663d21c47cf56e" == self.flickr.signature(dict)
         
+    def test_login_link(self):
+        qs = "?perms=read&api_sig=375d9f0bbd53805d9c5a3b61f65ac69d&api_key=abc&"
+        assert "http://flickr.com/services/auth/%s" % qs == self.flickr.login_link()
 if __name__ == "__main__":
     unittest.main()
